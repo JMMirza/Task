@@ -2,12 +2,14 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const User = require("../model/user")
 const router = express.Router()
+var session;
 router.get("/", (req, res) => {
     res.render("index")
 })
 router.post("/login", async (req, res) => {
+    session=req.session;
     console.log("hello",
-        req.body)
+        req.body,session)
     let username = req.body.username
     let password = req.body.password
     const user = await User.findOne({
@@ -44,6 +46,7 @@ router.post("/login", async (req, res) => {
     }
 })
 router.get('/logout',(req,res)=>{
+    req.session.destroy();
     res.render('index')
 })
 module.exports = router
